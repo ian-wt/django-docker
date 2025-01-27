@@ -11,22 +11,27 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-eb&od5nb!z!s6m+4q+@s-z(#s46q3i2q4kh*7qmfh5v8&&6*1_'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', 'true').lower() == 'true')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
 
+CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',')
 
 # Application definition
 
@@ -73,12 +78,35 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+POSTGRES_HOST = os.environ.get('POSTGRES_HOST')
+POSTGRES_DB = os.environ.get('POSTGRES_DB')
+POSTGRES_USER = os.environ.get('POSTGRES_USER')
+POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
+POSTGRES_PORT = os.environ.get('POSTGRES_PORT')
+
+POSTGRES_CONFIG = {
+    'HOST': POSTGRES_HOST,
+    'NAME': POSTGRES_DB,
+    'USER': POSTGRES_USER,
+    'PASSWORD': POSTGRES_PASSWORD,
+    'PORT': POSTGRES_PORT,
+}
+# Make sure all environment variables for database are properly configured.
+missing_db_params = [k for k, v in POSTGRES_CONFIG.items() if not v]
+if missing_db_params:
+    raise ImproperlyConfigured(f"Db environment variable(s) missing: "
+                               f"{', '.join(missing_db_params)}.")
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        **POSTGRES_CONFIG,
     }
 }
+
+# DO managed db configuration
+if bool(os.environ.get('POSTGRES_REQUIRE_SSL', 'true').lower() == 'true'):
+    DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
 
 
 # Password validation
