@@ -1,6 +1,7 @@
-from .user import User
+from .user import User, UserProfile
 
 
 __all__ = [
     'User',
+    'UserProfile',
 ]
