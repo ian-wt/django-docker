@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DJANGO_DEBUG', 'true').lower() == 'true')
+DEBUG = bool(os.getenv('DJANGO_DEBUG', 'true').lower() == 'true')
 
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
 
@@ -111,11 +111,6 @@ DATABASES = {
         **POSTGRES_CONFIG,
     }
 }
-
-# DO managed db configuration
-if bool(os.environ.get('POSTGRES_REQUIRE_SSL', 'true').lower() == 'true'):
-    DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

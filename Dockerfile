@@ -9,12 +9,20 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 COPY ./requirements.txt /tmp/requirements.txt
-
-WORKDIR /app
+COPY scripts /scripts
 
 RUN \
-    apt-get update && apt-get install -y && \
+    # add limited user \
+    adduser \
+        --disabled-password \
+        --no-create-home \
+        django-user && \
+    apt-get update && apt-get install -y \
     # build deps \
+      python3-dev \
+      libpq-dev \
+      gcc \
+      --no-install-recommends && \
     # set up python env \
     python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
@@ -23,8 +31,15 @@ RUN \
     apt-get autoremove -y && \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -rf /tmp
+    rm -rf /tmp && \
+    # permissions
+    chown -R django-user:django-user /scripts && \
+    chmod -R +x /scripts
 
+
+WORKDIR /app
 COPY ./app /app
 
 ENV PATH="/py/bin:$PATH"
+
+USER django-user
