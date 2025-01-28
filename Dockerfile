@@ -11,6 +11,8 @@ ENV PYTHONDONTWRITEBYTECODE 1
 COPY ./requirements.txt /tmp/requirements.txt
 COPY scripts /scripts
 
+ARG DEV=false
+
 RUN \
     # add limited user \
     adduser \
@@ -41,5 +43,9 @@ WORKDIR /app
 COPY ./app /app
 
 ENV PATH="/py/bin:$PATH"
+ENV DEV=$DEV
 
 USER django-user
+
+CMD ["/scripts/entrypoint.sh"]
+# ^^ if you're not calling this already from your k8s deployment
