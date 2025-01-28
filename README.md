@@ -12,7 +12,7 @@ Create a .env file in the project root and add the following:
 DJANGO_SECRET_KEY=not-a-secure-secret-key
 DJANGO_DEBUG=true
 DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
-DJANGO_CSRF_TRUSTED_ORIGINS=http://localhost,http://127.0.0.1,0.0.0.0
+DJANGO_CSRF_TRUSTED_ORIGINS=http://localhost,http://127.0.0.1,http://0.0.0.0
 
 POSTGRES_REQUIRE_SSL=false
 POSTGRES_DB=devdb
