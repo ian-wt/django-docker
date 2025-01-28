@@ -86,9 +86,9 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DB_HOST = os.environ.get('DB_HOST')
-DB_NAME = os.environ.get('DB_NAME', 'testdb')
-DB_USER = os.environ.get('DB_USER')
-DB_PASS = os.environ.get('DB_PASS')
+DB_NAME = os.environ.get('POSTGRES_DB', 'testdb')
+DB_USER = os.environ.get('POSTGRES_USER')
+DB_PASS = os.environ.get('POSTGRES_PASSWORD')
 DB_PORT = os.environ.get('DB_PORT')
 DB_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3')
 
