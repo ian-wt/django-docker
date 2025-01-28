@@ -1,0 +1,6 @@
+[run]
+omit =
+    app/settings/*
+    app/asgi.py
+    app/wsgi.py
+    manage.py
