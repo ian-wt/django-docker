@@ -2,8 +2,19 @@ services:
   app:
     build:
       context: .
+      args:
+        - DEV=true
+    ports:
+      - "8001:8000"
+#    environment:
+#      - PORT=8000
     volumes:
       - ./app:/app
+    command: >
+      sh -c "/scripts/migrate.sh &&
+      /scripts/fixtures.sh &&
+      /scripts/collectstatic.sh &&
+      /scripts/entrypoint.sh"
     env_file:
       - .env
     depends_on:
