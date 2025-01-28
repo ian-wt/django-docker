@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password, **extra_fields)
 
-    def create_superuser(self, email, password, **extra_fields):
+    def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
 
         if extra_fields.get('is_superuser') is not True:
@@ -76,7 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         Return a concatenation of the first_name and last_name fields separated
            by a space.
         """
-        return "%s %s" % (self.first_name, self.last_name)
+        return f'{self.first_name} {self.last_name}'
 
     def get_user_initials(self):
         """
