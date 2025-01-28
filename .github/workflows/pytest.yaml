@@ -1,0 +1,33 @@
+name: Run Pytest with Coverage
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - name: Install requirements
+        run: |
+          pip install -r requirements.txt
+          pip install pytest-django pytest-cov
+      - name: Run tests and collect coverage
+        env:
+          DJANGO_SECRET_KEY: not-a-secure-secret-key
+          DJANGO_DEBUG: true
+          DJANGO_CSRF_TRUSTED_ORIGINS: https://example.com
+          PYTHONPATH: ${{ github.workspace }}
+          DJANGO_SETTINGS_MODULE: app.settings
+        run: |
+          cd app
+          python manage.py migrate
+          pytest --cov=. --cov-branch --cov-report=xml
+      - name: upload covereage to Codecov
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

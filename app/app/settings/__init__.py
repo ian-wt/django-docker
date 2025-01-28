@@ -85,29 +85,34 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-POSTGRES_HOST = os.environ.get('POSTGRES_HOST')
-POSTGRES_DB = os.environ.get('POSTGRES_DB')
-POSTGRES_USER = os.environ.get('POSTGRES_USER')
-POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
-POSTGRES_PORT = os.environ.get('POSTGRES_PORT')
+DB_HOST = os.environ.get('DB_HOST')
+DB_NAME = os.environ.get('DB_NAME', 'testdb')
+DB_USER = os.environ.get('DB_USER')
+DB_PASS = os.environ.get('DB_PASS')
+DB_PORT = os.environ.get('DB_PORT')
+DB_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3')
 
-POSTGRES_CONFIG = {
-    'HOST': POSTGRES_HOST,
-    'NAME': POSTGRES_DB,
-    'USER': POSTGRES_USER,
-    'PASSWORD': POSTGRES_PASSWORD,
-    'PORT': POSTGRES_PORT,
+DB_CONFIG = {
+    'NAME': DB_NAME,
+    'ENGINE': DB_ENGINE
 }
-# Make sure all environment variables for database are properly configured.
-missing_db_params = [k for k, v in POSTGRES_CONFIG.items() if not v]
-if missing_db_params:
-    raise ImproperlyConfigured(f"Db environment variable(s) missing: "
-                               f"{', '.join(missing_db_params)}.")
+
+if not DB_ENGINE.endswith('sqlite3'):
+    DB_CONFIG.update({
+        'HOST': DB_HOST,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASS,
+        'PORT': DB_PORT,
+    })
+    # Make sure all environment variables for database are properly configured.
+    missing_db_params = [k for k, v in DB_CONFIG.items() if not v]
+    if missing_db_params:
+        raise ImproperlyConfigured(f"Db environment variable(s) missing: "
+                                   f"{', '.join(missing_db_params)}.")
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        **POSTGRES_CONFIG,
+        **DB_CONFIG,
     }
 }
 
