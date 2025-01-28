@@ -1,4 +1,5 @@
 # django-blog
+[![codecov](https://codecov.io/github/ian-wt/django-blog/graph/badge.svg?token=44P1F40HXX)](https://codecov.io/github/ian-wt/django-blog)
 
 ## Setup
 
