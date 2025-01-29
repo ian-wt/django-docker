@@ -71,6 +71,18 @@ class TestUser(TestCase):
         self.assertTrue(user.is_superuser)
         self.assertFalse(user.is_staff)
 
+        with self.assertRaisesMessage(
+            ValueError,
+            'User type created with this method must be '
+            'superuser.'
+        ):
+            User.objects.create_superuser(
+                first_name='John',
+                last_name='Smith',
+                email='john.smith@example.com',
+                is_superuser=False
+            )
+
     def test_user_str_method(self):
         self.assertEqual(
             str(self.user),
@@ -103,3 +115,10 @@ class TestUser(TestCase):
             hasattr(self.user, 'user_profile')
         )
         self.assertIsInstance(self.user.user_profile, UserProfile)
+
+    def test_user_profile_str_method(self):
+        self.assertTrue(hasattr(self.user, 'user_profile'))
+        self.assertEqual(
+            str(self.user.user_profile),
+            f"{self.user.first_name} {self.user.last_name}'s Profile"
+        )
