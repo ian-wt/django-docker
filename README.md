@@ -21,8 +21,10 @@ POSTGRES_USER=devuser
 POSTGRES_PASSWORD=not-a-secure-password
 POSTGRES_MIGRATOR=devmigrator
 POSTGRES_MIGRATOR_PASS=not-a-secure-password
-POSTGRES_HOST=db
-POSTGRES_PORT=5432
+DB_HOST=db
+DB_PORT=5432
+DB_ENGINE=django.db.backends.postgresql
+
 ```
 
 These values will allow you to begin working with Django in development.
@@ -40,6 +42,17 @@ print(get_random_secret_key())
 
 See [Django Deployment Checklist](https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/#) 
 for more information.
+
+Also, the environment variable names are important if you decide to use
+the postgres image in compose. For example, you need to use:
+```text
+POSTGRES_PASSWORD
+```
+Otherwise the image won't pick up your environment variables and your
+app service won't work with your db service.
+
+See [Docker Postgres Docs](https://hub.docker.com/_/postgres) for more 
+information on env vars.
 
 ### Configure WSGI -OR- ASGI
 
