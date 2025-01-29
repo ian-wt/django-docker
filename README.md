@@ -1,5 +1,9 @@
-# django-blog
-[![codecov](https://codecov.io/github/ian-wt/django-blog/graph/badge.svg?token=44P1F40HXX)](https://codecov.io/github/ian-wt/django-blog)
+# django-docker
+[![codecov](https://codecov.io/github/ian-wt/django-docker/graph/badge.svg?token=VJ7A6984BY)](https://codecov.io/github/ian-wt/django-docker)
+
+## About
+
+A simple project start for a Django monolith in Docker with PostgreSQL.
 
 ## Setup
 
