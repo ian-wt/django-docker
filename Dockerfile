@@ -29,15 +29,24 @@ RUN \
     python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install --no-cache-dir -r /tmp/requirements.txt && \
+    # permissions
+    chown -R django-user:django-user /scripts && \
+    chmod -R +x /scripts && \
+    # dev
+    if [ $DEV = "true" ]; then \
+        /py/bin/pip install --no-cache-dir -r /tmp/requirements.dev.txt && \
+        mkdir -p files/static  && \
+        chown -R django-user:django-user files/static &&  \
+        chmod -R 755 files/static && \
+        mkdir -p files/media  && \
+        chown -R django-user:django-user files/media &&  \
+        chmod -R 755 files/media ; \
+    fi && \
     # clean up \
     apt-get autoremove -y && \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -rf /tmp && \
-    # permissions
-    chown -R django-user:django-user /scripts && \
-    chmod -R +x /scripts
-
+    rm -rf /tmp
 
 WORKDIR /app
 COPY ./app /app
