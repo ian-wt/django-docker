@@ -5,6 +5,10 @@
 
 A simple project start for a Django monolith in Docker with PostgreSQL.
 
+If you find this useful, please leave me a star.
+
+Learn more at [ianwaldron.com](https://ianwaldron.com)
+
 ## Setup
 
 To get up and running, follow these steps:
